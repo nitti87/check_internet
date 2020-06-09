@@ -21,7 +21,7 @@ const check_internet = (option = {}) => {
       with_interval && startOver && !doAfter_bool ? (start_interval(), startOver = false) : null
     } else {
       
-      if(count === number) {
+      if(count === number && number !== undefined) {
         clearInterval(timer)
         return counted_error()
       } else {        
