@@ -17,7 +17,7 @@ const check_internet = (option = {}) => {
     if(navigator.onLine) {
       doAfter_bool ? (doAfter_offline(), start_interval()) : undefined
 
-      typeof option.online.run === 'function' ? option.online.run(check_funct) : option.online.run || null
+      option.online !== undefined && typeof option.online.run === 'function' ? option.online.run(check_funct) : null
       with_interval && startOver && !doAfter_bool ? (start_interval(), startOver = false) : null
     } else {
       
@@ -26,7 +26,7 @@ const check_internet = (option = {}) => {
         return counted_error()
       } else {        
         
-        typeof option.offline.run === 'function' ? option.offline.run(check_funct) : option.offline.run || null
+        option.offline !== undefined && typeof option.offline.run === 'function' ? option.offline.run(check_funct) : null
         clearInterval(timer)
         startOver = true
         
@@ -34,7 +34,7 @@ const check_internet = (option = {}) => {
       }
     }
   }
-  
+
   function counted_error(){
     option.offline.count.do()
     
