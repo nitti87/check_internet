@@ -1,51 +1,19 @@
-const check_internet = (option = {}) => {
-  let [ with_interval, timer, startOver, interval, doAfter_offline, number, count ] = [
-    option.with_interval || false, 
-    undefined, 
-    false,
-    option.with_interval ? option.with_interval.interval || 1000 : undefined,
-    option.offline.doAfter_offline || null,
-    option.offline.count && typeof option.offline.count.do === 'function' ? parseInt(option.offline.count.number) : undefined,
-    option.offline.count && typeof option.offline.count.do === 'function' ? 0 : undefined
-  ]
+const check_internet = ({ offline: { run, doAfter_offline }, interval }) => {
+ let timer
+ let hasChecked_offline = false
 
-  const start_interval = () => {
-    !with_interval ? check_funct() : (timer = setInterval(() => { check_funct() }, interval))
+ const doA_check = () => {
+  if (!navigator.onLine) {
+   hasChecked_offline = true
+   clearInterval(timer)
+   run instanceof Function ? run(startInterval()) : undefined
+  } else if (hasChecked_offline && doAfter_offline instanceof Function) {
+   hasChecked_offline = false
+   doAfter_offline ()
   }
+ }
 
-  const check_funct = (doAfter_bool) => {
-    if(navigator.onLine) {
-      doAfter_bool ? (doAfter_offline(), start_interval()) : undefined
+ const startInterval = () => { return !interval ? doA_check : timer = setInterval(doA_check, interval) }
 
-      option.online !== undefined && typeof option.online.run === 'function' ? option.online.run(check_funct) : null
-      with_interval && startOver && !doAfter_bool ? (start_interval(), startOver = false) : null
-    } else {
-      
-      if(count === number && number !== undefined) {
-        clearInterval(timer)
-        return counted_error()
-      } else {        
-        
-        option.offline !== undefined && typeof option.offline.run === 'function' ? option.offline.run(check_funct) : null
-        clearInterval(timer)
-        startOver = true
-        
-        option.offline.count && typeof option.offline.count.do === 'function' ? count++ : null
-      }
-    }
-  }
-
-  function counted_error(){
-    option.offline.count.do()
-    
-    let time_error = setInterval(() => {
-      if(navigator.onLine) {
-        doAfter_offline()
-        clearInterval(time_error)
-        start_interval()
-      }
-    }, interval || 1000)
-  }
-
-  start_interval()
+ return startInterval()
 }
