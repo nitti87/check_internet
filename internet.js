@@ -6,14 +6,13 @@ const check_internet = ({ offline: { run, doAfter_offline }, interval }) => {
   if (!navigator.onLine) {
    hasChecked_offline = true
    clearInterval(timer)
-   run instanceof Function ? run(startInterval()) : undefined
+   run instanceof Function ? run(startInterval)) : undefined
   } else if (hasChecked_offline && doAfter_offline instanceof Function) {
    hasChecked_offline = false
    doAfter_offline ()
   }
  }
 
- const startInterval = () => { return !interval ? doA_check : timer = setInterval(doA_check, interval) }
-
+ function startInterval() { return !interval ? doA_check : timer = setInterval(doA_check, interval) }
  return startInterval()
 }
